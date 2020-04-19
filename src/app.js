@@ -12,15 +12,17 @@ io.on('connection', (socket) => {
   var total = io.engine.clientsCount;
   socket.on('disconnect', () => {
     activity++;
-    socket.emit('getSpectators',total);
+    total = io.engine.clientsCount;
+    io.emit('viewing',total);
     console.log('user disconnected ' + activity);
   });
   socket.on('viewing', () => {
     console.log('a user is viewing ' + activity);
     io.emit('viewing',total);
   });
-  
 });
+
+
 
 
 app.post('/covidapihook', (req, res) => {
