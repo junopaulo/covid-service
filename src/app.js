@@ -1,10 +1,12 @@
 const app = require('express')();
+const cors = require('cors');
 const server = require('http').createServer(app);
 const PORT = 8080;
 const io = require('socket.io')(server);
 
 let activity = 0;
 
+app.use(cors);
 
 io.on('connection', (socket) => {
   activity++; 
