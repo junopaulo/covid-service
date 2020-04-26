@@ -1,12 +1,27 @@
 const app = require('express')();
 const cors = require('cors');
+
+const PORT = process.env.PORT || 8080;
+
+app.use(cors());
+
+app.get('/', (req, res) => {
+  res.json({message: 'Welcome to Covid Service'});
+});
+
+app.post('/covidapihook', (req, res) => {
+  io.emit('covidapihook');
+  res.status(200).end();
+});
+
+
+
 const server = require('http').createServer(app);
-const PORT = 8080;
 const io = require('socket.io')(server);
 
-let activity = 0;
+io.origins(['*:*']);
 
-app.use(cors);
+let activity = 0;
 
 io.on('connection', (socket) => {
   activity++; 
@@ -24,13 +39,4 @@ io.on('connection', (socket) => {
   });
 });
 
-
-
-
-app.post('/covidapihook', (req, res) => {
-  io.emit('covidapihook');
-  res.status(200).end();
-});
-
-
-server.listen(8080);
+server.listen(PORT);
